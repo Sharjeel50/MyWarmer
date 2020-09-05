@@ -1,3 +1,4 @@
+import 'package:MyWarmer/widgets/category_selector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,26 +15,26 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Temprature',
+          'MyWarmer',
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.normal),
         ),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            iconSize: 20,
+            iconSize: 30,
             color: Colors.white,
             onPressed: () {}),
         elevation: 0.0,
         actions: [
           IconButton(
               icon: Icon(Icons.search),
-              iconSize: 20,
+              iconSize: 30,
               color: Colors.white,
               onPressed: () {})
         ],
       ),
-      body: Center(
-        child: Text(currentTime),
+      body: Column(
+        children: [CategorySelector()],
       ),
     );
   }
