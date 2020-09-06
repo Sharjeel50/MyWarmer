@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:MyWarmer/screens/home_screen.dart';
+import 'package:MyWarmer/screens/preset_screen.dart';
+import 'package:MyWarmer/screens/graphs_screen.dart';
+
+
 
 class CategorySelector extends StatefulWidget {
   @override
@@ -6,47 +11,34 @@ class CategorySelector extends StatefulWidget {
 }
 
 class _CategorySelectorState extends State<CategorySelector> {
-  int selectedIndex = 0;
-  final List<String> categories = [
-    'Temperature',
-    'Humidity',
-    'Presets',
-    'Requests'
-  ];
+
+  int _currentIndex = 0;
+  final allTabs = [HomeScreen(), PresetScreen(), GraphsScreen()];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 90,
-      color: Colors.deepPurple,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedIndex = index;
-              });
-            },
-            child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 30.0,
-                ),
-                child: Text(
-                  categories[index],
-                  style: TextStyle(
-                      color: index == selectedIndex
-                          ? Colors.white
-                          : Colors.white60,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.normal,
-                      letterSpacing: 1.2),
-                )),
-          );
+    return BottomNavigationBar(
+        currentIndex: _currentIndex,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+              backgroundColor: Colors.lightBlue),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.bookmark),
+              title: Text('Presets'),
+              backgroundColor: Colors.lightBlue),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard),
+              title: Text('Graphs'),
+              backgroundColor: Colors.lightBlue),
+        ],
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+            Navigator.push(context, MaterialPageRoute(builder: (context) => allTabs[_currentIndex]));
+          });
         },
-      ),
     );
   }
 }
