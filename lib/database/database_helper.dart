@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:MyWarmer/models/preset.dart';
@@ -10,9 +9,8 @@ class DatabaseHelper {
   static final _dbVersion = 1;
 
   static final _tableName = 'presets';
-  static final _columnName = 'name';
-  static final _columnTemp = 'temperature';
-  static final _columnDateCreated = 'date_created';
+  static final columnName = 'name';
+  static final columnTemp = 'temperature';
 
   DatabaseHelper._privateConstructor();
 
@@ -32,52 +30,59 @@ class DatabaseHelper {
     return await openDatabase(path, version: _dbVersion, onCreate: _onCreate);
   }
 
+  // Working
   Future _onCreate(Database db, int version) {
     db.execute(
-        ''' Create TABLE $_tableName ($_columnName TEXT PRIMARK KEY, $_columnTemp TEXT, $_columnDateCreated DATETIME) ''');
+        ''' Create TABLE $_tableName ($columnName TEXT PRIMARK KEY, $columnTemp TEXT) ''');
+
+    // Add some default presets for users to choose from
+    db.rawQuery(
+        ''' INSERT INTO $_tableName ($columnName, $columnTemp) VALUES ("Night Time", 35.0), ("Mid day", 25.0), ("Afternoon", 23.0)''');
   }
 
+  // Working
   Future<int> insert(Preset preset) async {
     Database database = await instance.database;
 
     var preset_name = preset.name;
-    var check = await database.query(''' SELECT * FROM $_tableName WHERE $_columnName LIKE $preset_name''');
+    var check = await database.rawQuery(
+        ''' SELECT * FROM $_tableName WHERE $columnName LIKE "$preset_name"''');
 
-    if(check.length < 0){
-      return null;
-    } else {
-      return await database.rawInsert(
-          ''' INSERT INTO $_tableName ($_columnName, $_columnTemp, $_columnDateCreated) VALUES (?, ?, ? )''',
-          [preset.name, preset.temp, preset.datetime]);
-    }
+    return check.length == 0
+        ? await database.rawInsert(
+            ''' INSERT INTO $_tableName ($columnName, $columnTemp) VALUES (?, ?)''',
+            [preset.name, preset.temp])
+        : null;
   }
 
+  // Working
   Future<List<Map<String, dynamic>>> queryAll() async {
     Database database = await instance.database;
     return await database.query(_tableName);
   }
 
-  Future<dynamic> get() async {
+  // Working
+  Future<dynamic> get(Preset preset) async {
     Database database = await instance.database;
-    var result = await database.query(_tableName);
-    if(result.length == 0){
-      return null;
-    } else {
-      var resMap = result[0];
-      return resMap.isNotEmpty ? resMap : null;
-    }
+
+    String name = preset.name;
+    dynamic result = await database.rawQuery(
+        '''SELECT * FROM $_tableName WHERE $columnName LIKE "$name"''');
+    return result.lenght == 1 ? result : null;
   }
 
+  // Working
   Future update(Map<String, dynamic> row) async {
     Database database = await instance.database;
-    int id = row[_columnName];
+    String id = row[columnName];
     return await database
-        .update(_tableName, row, where: '$_columnName = ?', whereArgs: [id]);
+        .update(_tableName, row, where: '$columnName = ?', whereArgs: [id]);
   }
 
-  Future<int> delete(int id) async {
+  // Working
+  Future<int> delete(String name) async {
     Database database = await instance.database;
     return await database
-        .delete(_tableName, where: '$_columnName = ?', whereArgs: [id]);
+        .delete(_tableName, where: '$columnName = ?', whereArgs: [name]);
   }
 }

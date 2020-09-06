@@ -10,7 +10,7 @@ class _GraphsScreen extends State<GraphsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Graphs page', style: TextStyle(fontSize: 28),), backgroundColor: Colors.deepPurple,),
+      appBar: AppBar(title: Text('Graphs page', style: TextStyle(fontSize: 28),), backgroundColor: Colors.lightBlue,),
     );
   }
 }
