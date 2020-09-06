@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'MyWarmer',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Colors.deepPurple),
+      theme: ThemeData(primaryColor: Colors.lightBlue),
       home: HomeScreen(),
     );
   }

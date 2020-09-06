@@ -1,6 +1,6 @@
-import 'package:MyWarmer/widgets/category_selector.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:MyWarmer/widgets/category_selector.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -19,22 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.normal),
         ),
         centerTitle: true,
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            iconSize: 30,
-            color: Colors.white,
-            onPressed: () {}),
-        elevation: 0.0,
-        actions: [
-          IconButton(
-              icon: Icon(Icons.search),
-              iconSize: 30,
-              color: Colors.white,
-              onPressed: () {})
-        ],
       ),
+      bottomNavigationBar: CategorySelector(),
       body: Column(
-        children: [CategorySelector()],
+        children: [],
       ),
     );
   }
