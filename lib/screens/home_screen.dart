@@ -1,6 +1,6 @@
-import 'package:MyWarmer/widgets/category_selector.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:MyWarmer/widgets/category_selector.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
