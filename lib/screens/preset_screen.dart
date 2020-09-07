@@ -10,18 +10,22 @@ class PresetScreen extends StatefulWidget {
 }
 
 class _PresetScreen extends State<PresetScreen> {
-  Map<String, String> newPreset = {};
-  Future _presetFuture;
-
   @override
   void initState() {
     super.initState();
-    _presetFuture = getPresets();
   }
 
   getPresets() async {
     List _presetData = await DatabaseHelper.instance.queryAll();
-    return _presetData;
+    List<Preset> returnPresets = [];
+
+    for (var data in _presetData) {
+      var temp = double.parse(data['temperature']);
+      Preset a = Preset(name: data['name'], temperature: temp);
+      returnPresets.add(a);
+    }
+
+    return returnPresets;
   }
 
   @override
@@ -37,20 +41,44 @@ class _PresetScreen extends State<PresetScreen> {
       bottomNavigationBar: CategorySelector(),
       body: Column(
         children: [
-          for (var preset in getPresets()) Text("New ${preset.data}"),
-          RawMaterialButton(
-            onPressed: () {},
-            elevation: 2.0,
-            fillColor: Colors.white,
-            child: Icon(
-              Icons.add,
-              size: 20.0,
-            ),
-            padding: EdgeInsets.all(15.0),
-            shape: CircleBorder(),
+          Container(
+            child: FutureBuilder(
+                future: getPresets(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.data == null) {
+                    return Container(
+                      child: Center(
+                        child: Text("Loading.. "),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext ctx, int index) {
+                          return ListTile(
+                            title: Text(snapshot.data[index].name),
+                            subtitle: Text(snapshot.data[index].temperature.toString()),
+                            onTap: () {
+                              print(snapshot.data[index].name);
+                            },
+                          );
+                        });
+                  }
+                }),
           ),
+          // RawMaterialButton(
+          //   onPressed: () {},
+          //   elevation: 2.0,
+          //   fillColor: Colors.white,
+          //   child: Icon(
+          //     Icons.add,
+          //     size: 20.0,
+          //   ),
+          //   padding: EdgeInsets.all(15.0),
+          //   shape: CircleBorder(),
+          // ),
         ],
-        mainAxisAlignment: MainAxisAlignment.center,
       ),
     );
   }

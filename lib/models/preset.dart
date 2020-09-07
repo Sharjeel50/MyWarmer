@@ -6,15 +6,15 @@ String userToJson(Preset data) => json.encode(data.toJson());
 
 class Preset {
   String name;
-  double temp;
+  double temperature;
 
   Preset({
     this.name,
-    this.temp,
+    this.temperature,
   });
 
   factory Preset.fromJson(Map<String, dynamic> json) =>
-      Preset(name: json['name'], temp: json['temp']);
+      Preset(name: json['name'], temperature: json['temperature']);
 
-  Map<String, dynamic> toJson() => {'name': name, 'temp': temp};
+  Map<String, dynamic> toJson() => {'name': name, 'temperature': temperature};
 }
